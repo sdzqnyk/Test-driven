@@ -48,12 +48,11 @@ class ChaseTest(unittest.TestCase):
         plane = env.add(Plane(position=np.array([0, 0], velocity=np.array([2, 0]))))
         missile = env.add(Missile(position=np.array([0, -100], speed=10))
         
-        while not env.is_over():
+        while over:
             env.step()
-        
-        dist = np.linalg.norm(plane.position - missile.position)
-        time_is_over = env.is_over()
-        self.assertTrue(dist < 0.1 or time_is_over)
+            dist = np.linalg.norm(plane.position - missile.position)
+            time_is_over = env.is_over()
+            over = self.assertTrue(dist < 0.1 or time_is_over)
 
     def test_movable(self):
         env = Environment(dt=0.1)
