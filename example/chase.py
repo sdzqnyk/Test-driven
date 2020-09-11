@@ -57,7 +57,7 @@ class MovableEntity(Entity):
 def print_env(env: Environment):
     print(env.children[0].pos, env.children[1].pos)
 
-
+# 全局变量
 missile_pos, plane_pos = [], []
 
 
