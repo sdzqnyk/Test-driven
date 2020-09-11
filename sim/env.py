@@ -2,12 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 
+
 class SimClock:
     """ 仿真时钟. """
+
     def __init__(self, **kwargs):
         self.start = 0.0
         self.end = 10.0
-        self.dt = 1.0
+        self.dt = 0.01
         self.now = 0.0
         self.set_params(**kwargs)
 
@@ -51,13 +53,13 @@ class Environment:
 
     def find(self, obj):
         return obj if obj in self._entities else None
-    
+
     def step(self):
         self._clock.step()
 
         # 1.交互
         self.access()
-        
+
         # 2.步进.
         active_objs = [obj for obj in self._entities if obj.is_active()]
         for obj in active_objs:
@@ -66,11 +68,11 @@ class Environment:
         # 3.处理事件.
         for evt in self.step_events:
             evt
-    
+
     def access(self):
-        children_copy = copy.deepcopy(self.children)
+        # children_copy = copy.deepcopy(self.children)
         for child in self.children:
-            others = [obj for obj in children_copy if obj.id != child.id]
+            others = [obj for obj in self.children if obj.id != child.id]
             for other in others:
                 child.access(other)
 

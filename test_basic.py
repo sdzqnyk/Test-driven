@@ -1,54 +1,56 @@
-
-
-import unittest
-
 from sim import Environment, Entity
+
+
 class StepEntity(Entity):
-    def __init__(self):
+    def __init__(self, ds=1., da=0.1):
         super().__init__()
-        self.value : int = 0
+        self.value: int = 0
+        self.ds = ds
+        self.da = da
 
     def step(self, ti):
-        self.value += 1
+        self.value += self.ds
 
-class TestEnv(unittest.TestCase):
-    def test_create_entity(self):
-        obj = Entity()
-        self.assertTrue(obj is not None)
+    def access(self, other):
+        # for other in others:
 
-        obj2 = Entity()
-        self.assertTrue(obj2 is not None)
+        other.value -= self.da
 
-        self.assertNotEqual(obj.__id, obj2.__id)
 
-    def test_env(self):
-        env = Environment()
-                
-        obj = env.add(StepEntity())
-        self.assertTrue(obj is not None)
-        self.assertEqual(len(env.children), 1)
-        
-        obj2 = env.add(StepEntity())
-        self.assertTrue(obj2 is not None)
-        self.assertEqual(len(env.children), 2)
+def test_create_entity():
+    obj = Entity()
+    obj2 = Entity()
+    assert (obj.id != obj2.id)
 
-        obj3 = env.add(obj)
-        self.assertTrue(obj3 is not None)
-        self.assertEqual(len(env.children), 2)
 
-        while not env.is_over():
-            env.step()
-            pass
+if __name__ == "__main__":
+    test_create_entity()
 
-        self.assertTrue(env.is_over())
+
+def test_env():
+    env = Environment()
+
+    obj = env.add(StepEntity())
+    assert (obj is not None)
+    assert (len(env.children) == 1)
+
+    obj2 = env.add(StepEntity())
+    assert (obj2 is not None)
+    assert (len(env.children) == 2)
+
+    # obj3 = env.add(StepEntity())
+    # assert (obj3 is not None)
+    # assert (len(env.children) == 3)
+
+    while not env.is_over():
+        env.step()
         pass
 
-    def test_env2(self):
-        env = Environment(dt=0.1)
-        env.add(StepEntity())
-        while not env.is_over():
-            env.step()
-        pass
+    assert (env.is_over() is True)
 
 
-
+def test_env2():
+    env = Environment(dt=0.1)
+    env.add(StepEntity())
+    while not env.is_over():
+        env.step()
