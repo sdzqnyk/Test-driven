@@ -8,7 +8,7 @@ class SimClock:
 
     def __init__(self, **kwargs):
         self.start = 0.0
-        self.end = 10.0
+        self.end = 5.0
         self.dt = 0.01
         self.now = 0.0
         self.set_params(**kwargs)
@@ -67,12 +67,12 @@ class Environment:
 
         # 3.处理事件.
         for evt in self.step_events:
-            evt
+            evt(self)
 
     def access(self):
-        # children_copy = copy.deepcopy(self.children)
+        children_copy = copy.deepcopy(self.children)
         for child in self.children:
-            others = [obj for obj in self.children if obj.id != child.id]
+            others = [obj for obj in children_copy if obj.id != child.id]
             for other in others:
                 child.access(other)
 
